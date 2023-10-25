@@ -2,6 +2,9 @@ module zstd
 
 #flag -D ZSTD_STATIC_LINKING_ONLY
 #flag -D ZSTD_DISABLE_ASM
+$if windows {
+	#flag -D ZSTD_NO_INTRINSICS
+}
 #flag -I @VROOT/libzstd
 #flag @VROOT/libzstd/common/debug.o
 #flag @VROOT/libzstd/common/entropy_common.o
