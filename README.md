@@ -201,6 +201,11 @@ cctx.compress_end(mut sctx)!
 #### Compression
 
 ```v
+const (
+	compress_stream_out_size
+	compress_stream_in_size
+)
+
 new_compress_stream_context() &StreamContext
 (c &CompressContext) compress_chunk(
   mut sctx StreamContext, src []u8, last bool, drain fn (buf &u8, len int) !) !
@@ -211,6 +216,11 @@ new_compress_stream_context() &StreamContext
 #### Decompression
 
 ```v
+const (
+	decompress_stream_out_size
+	decompress_stream_in_size
+)
+
 new_decompress_stream_context() &StreamContext
 (d &DecompressContext) decompress_chunk(
   mut sctx StreamContext, src []u8, last bool, drain fn (buf &u8, len int) !) !

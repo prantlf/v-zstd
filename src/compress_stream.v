@@ -1,6 +1,6 @@
 module zstd
 
-const (
+pub const (
 	compress_stream_out_size = int(C.ZSTD_CStreamOutSize())
 	compress_stream_in_size  = int(C.ZSTD_CStreamInSize())
 )

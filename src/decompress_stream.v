@@ -1,6 +1,6 @@
 module zstd
 
-const (
+pub const (
 	decompress_stream_out_size = int(C.ZSTD_DStreamOutSize())
 	decompress_stream_in_size  = int(C.ZSTD_DStreamInSize())
 )
