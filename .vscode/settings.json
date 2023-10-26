@@ -3,7 +3,9 @@
     "**/.git": true,
     "**/.DS_Store": true,
     "**/*_test": true,
-    "**/*.dSYM": true
+    "**/*.dSYM": true,
+    "gzstd": true,
+    "gunzstd": true
   },
   "search.exclude": {
     "**/node_modules": true
