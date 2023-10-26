@@ -1,9 +1,14 @@
+// Compresses files supplied on the command line. Creates new files appending
+// the extension ".z" to the original name. The target file will be
+// overwritten if it exists.
+
 module main
 
 import os { create, open, rm }
 import zstd { CompressContext, CompressParam, StreamContext, new_compress_context, new_compress_stream_context }
 
 fn compress(in_name string, cctx &CompressContext, mut sctx StreamContext, mut buf []u8) ! {
+	// make sure that a failed previous compression won't affect the new one
 	cctx.reset(zstd.ResetDir.session_only)
 
 	mut in_file := open(in_name)!
@@ -21,6 +26,8 @@ fn compress(in_name string, cctx &CompressContext, mut sctx StreamContext, mut b
 	drain := fn [mut out_file_ref] (buf &u8, len int) ! {
 		unsafe { out_file_ref.write_full_buffer(buf, usize(len))! }
 	}
+
+	// don't leave incomplete output files if something fails
 	abort := fn [out_name, mut out_file_ref] () {
 		out_file_ref.close()
 		rm(out_name) or { eprintln('cleanup failed: ${err.msg()}') }
@@ -54,8 +61,12 @@ fn main() {
 	defer {
 		cctx.free()
 	}
+	// make sure that the content will be protected by a checksum
 	cctx.set_param(CompressParam.checksum_flag, 1)!
+
 	mut sctx := new_compress_stream_context()
+
+	// use the optimal input buffer size to prevent buffering or extra draining
 	mut buf := []u8{len: zstd.compress_stream_in_size}
 
 	for i in 1 .. os.args.len {

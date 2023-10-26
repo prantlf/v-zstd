@@ -1,9 +1,15 @@
+// Decompresses files supplied on the command line. Creates new files cutting
+// the extension ".z" from the original name away, or appending the extension
+// ".uz", if the file without the extension ".z" already exists. The target
+// file will be overwritten if it exists.
+
 module main
 
 import os { create, exists, open, rm }
 import zstd { DecompressContext, StreamContext, new_decompress_context, new_decompress_stream_context }
 
 fn decompress(in_name string, dctx &DecompressContext, mut sctx StreamContext, mut buf []u8) ! {
+	// make sure that a failed previous decompression won't affect the new one
 	dctx.reset(zstd.ResetDir.session_only)
 
 	mut in_file := open(in_name)!
@@ -13,6 +19,7 @@ fn decompress(in_name string, dctx &DecompressContext, mut sctx StreamContext, m
 
 	out_name := if in_name.ends_with('.z') {
 		name := in_name[..in_name.len - 2]
+		// don't overwrite the original decompressed file - this is an example
 		if exists(name) {
 			'${name}.uz'
 		} else {
@@ -30,6 +37,8 @@ fn decompress(in_name string, dctx &DecompressContext, mut sctx StreamContext, m
 	drain := fn [mut out_file_ref] (buf &u8, len int) ! {
 		unsafe { out_file_ref.write_full_buffer(buf, usize(len))! }
 	}
+
+	// don't leave incomplete output files if something fails
 	abort := fn [out_name, mut out_file_ref] () {
 		out_file_ref.close()
 		rm(out_name) or { eprintln('cleanup failed: ${err.msg()}') }
@@ -63,7 +72,10 @@ fn main() {
 	defer {
 		dctx.free()
 	}
+
 	mut sctx := new_decompress_stream_context()
+
+	// use the optimal input buffer size to prevent buffering or extra draining
 	mut buf := []u8{len: zstd.decompress_stream_in_size}
 
 	for i in 1 .. os.args.len {
