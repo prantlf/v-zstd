@@ -5,21 +5,17 @@ const (
 	compress_stream_in_size  = int(C.ZSTD_CStreamInSize())
 )
 
-pub fn new_compress_stream_context(drain fn (buf &u8, len int) !) &StreamContext {
-	dst := []u8{len: zstd.compress_stream_out_size}
-	output := &C.ZSTD_outBuffer{dst.data, usize(zstd.compress_stream_out_size), 0}
-	src := []u8{len: zstd.compress_stream_in_size}
-	input := &C.ZSTD_inBuffer{src.data, 0, 0}
-	return &StreamContext{drain, output, input}
+pub fn new_compress_stream_context() &StreamContext {
+	return new_stream_context(zstd.compress_stream_out_size, zstd.compress_stream_in_size)
 }
 
 [inline]
-pub fn (c &CompressContext) compress_chunk(mut sctx StreamContext, src []u8, last bool) ! {
-	unsafe { c.compress_chunk_at(mut sctx, src.data, src.len, last)! }
+pub fn (c &CompressContext) compress_chunk(mut sctx StreamContext, src []u8, last bool, drain fn (buf &u8, len int) !) ! {
+	unsafe { c.compress_chunk_at(mut sctx, src.data, src.len, last, drain)! }
 }
 
 [unsafe]
-pub fn (c &CompressContext) compress_chunk_at(mut sctx StreamContext, src &u8, src_len int, last bool) ! {
+pub fn (c &CompressContext) compress_chunk_at(mut sctx StreamContext, src &u8, src_len int, last bool, drain fn (buf &u8, len int) !) ! {
 	mut res := usize(0)
 	mut pos := 0
 	mut rest_len := src_len
@@ -40,7 +36,7 @@ pub fn (c &CompressContext) compress_chunk_at(mut sctx StreamContext, src &u8, s
 		}
 		res = C.ZSTD_compressStream2(c.cctx, sctx.output, sctx.input, end_op)
 		check_error(res)!
-		drain_buffer(mut sctx)!
+		drain_buffer(mut sctx, drain)!
 		pos += max_len
 	}
 	if last && (res != 0 || sctx.input.pos != sctx.input.size) {
@@ -48,11 +44,10 @@ pub fn (c &CompressContext) compress_chunk_at(mut sctx StreamContext, src &u8, s
 	}
 }
 
-pub fn (c &CompressContext) compress_end(mut sctx StreamContext) ! {
+pub fn (c &CompressContext) compress_end(mut sctx StreamContext, drain fn (buf &u8, len int) !) ! {
 	mut res := C.ZSTD_compressStream2(c.cctx, sctx.output, sctx.input, C.ZSTD_e_end)
 	check_error(res)!
 	if sctx.output.pos > 0 {
-		sctx.drain(sctx.output.dst, int(sctx.output.pos))!
-		sctx.output.pos = 0
+		drain_buffer(mut sctx, drain)!
 	}
 }

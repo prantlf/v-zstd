@@ -183,18 +183,17 @@ If you want to compress or decompress large data, or if the data comes chunk aft
 cctx := zstd.new_compress_context()!
 defer { cctx.free() }
 cctx.set_param(zstd.CompressParam.checksum_flag, 1)!
+mut sctx := zstd.new_compress_stream_context()
 
 mut dst := []u8{cap: zstd.compress_bound(src.len)}
 mut dst_ref := &dst
-
 drain := fn [dst_ref] (buf &u8, len int) ! {
   unsafe { dst_ref.push_many(buf, len) }
 }
-mut sctx := new_compress_stream_context(drain)
 
-cctx.compress_chunk(mut sctx, src, false)!
+cctx.compress_chunk(mut sctx, src, false, drain)!
 ...
-unsafe { cctx.compress_chunk(mut sctx, data, len, true)! }
+unsafe { cctx.compress_chunk(mut sctx, data, len, true, drain)! }
 ...
 cctx.compress_end(mut sctx)!
 ```
@@ -202,17 +201,21 @@ cctx.compress_end(mut sctx)!
 #### Compression
 
 ```v
-new_compress_stream_context(drain fn (buf &u8, len int) !) &StreamContext
-(c &CompressContext) compress_chunk(mut sctx StreamContext, src []u8, last bool) !
-(c &CompressContext) compress_chunk_at(mut sctx StreamContext, src &u8, src_len int, last bool) !
+new_compress_stream_context() &StreamContext
+(c &CompressContext) compress_chunk(
+  mut sctx StreamContext, src []u8, last bool, drain fn (buf &u8, len int) !) !
+(c &CompressContext) compress_chunk_at(
+  mut sctx StreamContext, src &u8, src_len int, last bool, drain fn (buf &u8, len int) !) !
 ```
 
 #### Decompression
 
 ```v
-new_decompress_stream_context(drain fn (buf &u8, len int) !) &StreamContext
-(d &DecompressContext) decompress_chunk(mut sctx StreamContext, src []u8, last bool) !
-(d &DecompressContext) decompress_chunk_at(mut sctx StreamContext, src &u8, src_len int, last bool) !
+new_decompress_stream_context() &StreamContext
+(d &DecompressContext) decompress_chunk(
+  mut sctx StreamContext, src []u8, last bool, drain fn (buf &u8, len int) !) !
+(d &DecompressContext) decompress_chunk_at(
+  mut sctx StreamContext, src &u8, src_len int, last bool, drain fn (buf &u8, len int) !) !
 ```
 
 ### Errors

@@ -13,8 +13,8 @@ fn compress_stream_test(src []u8) ![]u8 {
 	drain := fn [dst_ref] (buf &u8, len int) ! {
 		unsafe { dst_ref.push_many(buf, len) }
 	}
-	mut sctx := new_compress_stream_context(drain)
-	cctx.compress_chunk(mut sctx, src, true)!
+	mut sctx := new_compress_stream_context()
+	cctx.compress_chunk(mut sctx, src, true, drain)!
 
 	return dst
 }
@@ -42,8 +42,8 @@ fn test_decompress_one() {
 	drain := fn [dst_ref] (buf &u8, len int) ! {
 		unsafe { dst_ref.push_many(buf, len) }
 	}
-	mut sctx := new_decompress_stream_context(drain)
-	dctx.decompress_chunk(mut sctx, src, true)!
+	mut sctx := new_decompress_stream_context()
+	dctx.decompress_chunk(mut sctx, src, true, drain)!
 	dctx.reset(ResetDir.session_and_parameters)
 
 	assert dst == 'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
@@ -54,8 +54,6 @@ fn test_decompress_two() {
 	defer {
 		dctx.free()
 	}
-	dctx.set_param(DecompressParam.window_log_max, 27)!
-	assert dctx.get_param(DecompressParam.window_log_max)! == 27
 
 	src := [u8(40), u8(181), u8(47), u8(253), u8(36), u8(85), u8(61), u8(2), u8(0), u8(18), u8(133),
 		u8(15), u8(20), u8(176), u8(55), u8(7), u8(208), u8(167), u8(37), u8(249), u8(38), u8(165),
@@ -73,10 +71,11 @@ fn test_decompress_two() {
 	drain := fn [dst_ref] (buf &u8, len int) ! {
 		unsafe { dst_ref.push_many(buf, len) }
 	}
-	mut sctx := new_decompress_stream_context(drain)
+	mut sctx := new_decompress_stream_context()
 	unsafe {
-		dctx.decompress_chunk_at(mut sctx, src.data, half, false)!
-		dctx.decompress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, true)!
+		dctx.decompress_chunk_at(mut sctx, src.data, half, false, drain)!
+		dctx.decompress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, true,
+			drain)!
 	}
 	assert dst == 'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
 	assert src == compress_stream_test(dst)!

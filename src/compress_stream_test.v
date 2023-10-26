@@ -12,8 +12,8 @@ fn decompress_stream_test(src []u8) ![]u8 {
 	drain := fn [dst_ref] (buf &u8, len int) ! {
 		unsafe { dst_ref.push_many(buf, len) }
 	}
-	mut sctx := new_decompress_stream_context(drain)
-	dctx.decompress_chunk(mut sctx, src, true)!
+	mut sctx := new_decompress_stream_context()
+	dctx.decompress_chunk(mut sctx, src, true, drain)!
 
 	return dst
 }
@@ -33,8 +33,8 @@ fn test_compress_one() {
 	drain := fn [dst_ref] (buf &u8, len int) ! {
 		unsafe { dst_ref.push_many(buf, len) }
 	}
-	mut sctx := new_compress_stream_context(drain)
-	cctx.compress_chunk(mut sctx, src, true)!
+	mut sctx := new_compress_stream_context()
+	cctx.compress_chunk(mut sctx, src, true, drain)!
 	cctx.reset(ResetDir.session_and_parameters)
 
 	assert dst == [u8(40), u8(181), u8(47), u8(253), u8(36), u8(85), u8(61), u8(2), u8(0), u8(18),
@@ -66,11 +66,12 @@ fn test_compress_two() {
 	drain := fn [dst_ref] (buf &u8, len int) ! {
 		unsafe { dst_ref.push_many(buf, len) }
 	}
-	mut sctx := new_compress_stream_context(drain)
+	mut sctx := new_compress_stream_context()
 	unsafe {
-		cctx.compress_chunk_at(mut sctx, src.data, half, false)!
-		cctx.compress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, true)!
+		cctx.compress_chunk_at(mut sctx, src.data, half, false, drain)!
+		cctx.compress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, true, drain)!
 	}
+	sctx.reset()
 	assert dst == [u8(40), u8(181), u8(47), u8(253), u8(4), u8(88), u8(21), u8(2), u8(0), u8(82),
 		u8(133), u8(15), u8(19), u8(176), u8(23), u8(115), u8(208), u8(167), u8(37), u8(249), u8(38),
 		u8(211), u8(179), u8(108), u8(78), u8(82), u8(3), u8(236), u8(193), u8(25), u8(243), u8(136),
@@ -100,12 +101,13 @@ fn test_compress_with_end() {
 	drain := fn [dst_ref] (buf &u8, len int) ! {
 		unsafe { dst_ref.push_many(buf, len) }
 	}
-	mut sctx := new_compress_stream_context(drain)
+	mut sctx := new_compress_stream_context()
 	unsafe {
-		cctx.compress_chunk_at(mut sctx, src.data, half, false)!
-		cctx.compress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, false)!
+		cctx.compress_chunk_at(mut sctx, src.data, half, false, drain)!
+		cctx.compress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, false,
+			drain)!
 	}
-	cctx.compress_end(mut sctx)!
+	cctx.compress_end(mut sctx, drain)!
 
 	assert dst == [u8(40), u8(181), u8(47), u8(253), u8(4), u8(88), u8(21), u8(2), u8(0), u8(82),
 		u8(133), u8(15), u8(19), u8(176), u8(23), u8(115), u8(208), u8(167), u8(37), u8(249), u8(38),
