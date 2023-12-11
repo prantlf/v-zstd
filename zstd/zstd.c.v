@@ -33,10 +33,10 @@ $if windows {
 #flag @VROOT/libzstd/decompress/zstd_decompress_block.o
 #include "zstd.h"
 
-[typedef]
+@[typedef]
 struct C.ZSTD_CCtx {}
 
-[typedef]
+@[typedef]
 struct C.ZSTD_DCtx {}
 
 // [typedef]
@@ -45,14 +45,14 @@ struct C.ZSTD_DCtx {}
 // [typedef]
 // struct C.ZSTD_DStream {}
 
-[typedef]
+@[typedef]
 struct C.ZSTD_bounds {
 	error      usize
 	lowerBound int
 	upperBound int
 }
 
-[typedef]
+@[typedef]
 struct C.ZSTD_inBuffer {
 mut:
 	src  voidptr
@@ -60,7 +60,7 @@ mut:
 	pos  usize
 }
 
-[typedef]
+@[typedef]
 struct C.ZSTD_outBuffer {
 mut:
 	dst  voidptr

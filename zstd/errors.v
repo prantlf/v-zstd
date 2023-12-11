@@ -1,6 +1,6 @@
 module zstd
 
-[noinit]
+@[noinit]
 pub struct ContentSizeUnknown {
 	Error
 }

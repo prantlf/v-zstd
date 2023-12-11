@@ -9,12 +9,12 @@ pub fn new_decompress_stream_context() &StreamContext {
 	return new_stream_context(zstd.decompress_stream_out_size, zstd.decompress_stream_in_size)
 }
 
-[inline]
+@[inline]
 pub fn (d &DecompressContext) decompress_chunk(mut sctx StreamContext, src []u8, last bool, drain fn (buf &u8, len int) !) ! {
 	unsafe { d.decompress_chunk_at(mut sctx, src.data, src.len, last, drain)! }
 }
 
-[unsafe]
+@[unsafe]
 pub fn (d &DecompressContext) decompress_chunk_at(mut sctx StreamContext, src &u8, src_len int, last bool, drain fn (buf &u8, len int) !) ! {
 	mut res := usize(0)
 	mut pos := 0

@@ -1,6 +1,6 @@
 module zstd
 
-[noinit]
+@[noinit]
 pub struct DecompressContext {
 	dctx &C.ZSTD_DCtx = unsafe { nil }
 }
@@ -62,12 +62,12 @@ pub fn (d &DecompressContext) decompress(src []u8) ![]u8 {
 	return dst
 }
 
-[inline]
+@[inline]
 pub fn (d &DecompressContext) decompress_to(mut dst []u8, src []u8) !int {
 	return unsafe { d.decompress_at(mut dst.data, dst.len, src.data, src.len)! }
 }
 
-[unsafe]
+@[unsafe]
 pub fn (d &DecompressContext) decompress_at(mut dst &u8, dst_len int, src &u8, src_len int) !int {
 	res := C.ZSTD_decompressDCtx(d.dctx, dst, dst_len, src, src_len)
 	check_error(res)!

@@ -1,6 +1,6 @@
 module zstd
 
-[noinit]
+@[noinit]
 pub struct CompressContext {
 	cctx &C.ZSTD_CCtx = unsafe { nil }
 }
@@ -105,12 +105,12 @@ pub fn (c &CompressContext) compress(src []u8) ![]u8 {
 	return dst
 }
 
-[inline]
+@[inline]
 pub fn (c &CompressContext) compress_to(mut dst []u8, src []u8) !int {
 	return unsafe { c.compress_at(mut dst.data, dst.len, src.data, src.len)! }
 }
 
-[unsafe]
+@[unsafe]
 pub fn (c &CompressContext) compress_at(mut dst &u8, dst_len int, src &u8, src_len int) !int {
 	res := C.ZSTD_compress2(c.cctx, dst, dst_len, src, src_len)
 	check_error(res)!

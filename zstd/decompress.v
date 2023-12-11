@@ -10,12 +10,12 @@ pub fn decompress(src []u8) ![]u8 {
 	return dst
 }
 
-[inline]
+@[inline]
 pub fn decompress_to(mut dst []u8, src []u8) !int {
 	return unsafe { decompress_at(mut dst.data, dst.len, src.data, src.len)! }
 }
 
-[unsafe]
+@[unsafe]
 pub fn decompress_at(mut dst &u8, dst_len int, src &u8, src_len int) !int {
 	res := C.ZSTD_decompress(dst, dst_len, src, src_len)
 	check_error(res)!

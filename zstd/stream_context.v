@@ -1,6 +1,6 @@
 module zstd
 
-[noinit]
+@[noinit]
 pub struct StreamContext {
 mut:
 	output &C.ZSTD_outBuffer = unsafe { nil }
