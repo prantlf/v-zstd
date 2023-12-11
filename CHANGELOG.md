@@ -1,5 +1,11 @@
 # Changes
 
+## [0.1.1](https://github.com/prantlf/v-zstd/compare/v0.1.0...v0.1.1) (2023-12-11)
+
+### Bug Fixes
+
+* Adapt for V langage changes ([27462ee](https://github.com/prantlf/v-zstd/commit/27462ee8d0f10c1274e6965697405408c54cd4c0))
+
 ## [0.1.0](https://github.com/prantlf/v-zstd/compare/v0.0.1...v0.1.0) (2023-10-26)
 
 ### Features
