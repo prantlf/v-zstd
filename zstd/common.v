@@ -1,10 +1,8 @@
 module zstd
 
-pub const (
-	min_compress_level     = C.ZSTD_minCLevel()
-	max_compress_level     = C.ZSTD_maxCLevel()
-	default_compress_level = C.ZSTD_defaultCLevel()
-)
+pub const min_compress_level = C.ZSTD_minCLevel()
+pub const max_compress_level = C.ZSTD_maxCLevel()
+pub const default_compress_level = C.ZSTD_defaultCLevel()
 
 pub fn get_frame_content_size(frame []u8) !int {
 	res := C.ZSTD_getFrameContentSize(frame.data, frame.len)

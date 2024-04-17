@@ -5,17 +5,15 @@ pub struct CompressContext {
 	cctx &C.ZSTD_CCtx = unsafe { nil }
 }
 
-pub const (
-	strategy_fast     = C.ZSTD_fast
-	strategy_dfast    = C.ZSTD_dfast
-	strategy_greedy   = C.ZSTD_greedy
-	strategy_lazy     = C.ZSTD_lazy
-	strategy_lazy2    = C.ZSTD_lazy2
-	strategy_btlazy2  = C.ZSTD_btlazy2
-	strategy_btopt    = C.ZSTD_btopt
-	strategy_btultra  = C.ZSTD_btultra
-	strategy_btultra2 = C.ZSTD_btultra2
-)
+pub const strategy_fast = C.ZSTD_fast
+pub const strategy_dfast = C.ZSTD_dfast
+pub const strategy_greedy = C.ZSTD_greedy
+pub const strategy_lazy = C.ZSTD_lazy
+pub const strategy_lazy2 = C.ZSTD_lazy2
+pub const strategy_btlazy2 = C.ZSTD_btlazy2
+pub const strategy_btopt = C.ZSTD_btopt
+pub const strategy_btultra = C.ZSTD_btultra
+pub const strategy_btultra2 = C.ZSTD_btultra2
 
 pub enum CompressParam {
 	compression_level             = C.ZSTD_c_compressionLevel

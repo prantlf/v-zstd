@@ -1,9 +1,7 @@
 module zstd
 
-pub const (
-	compress_stream_out_size = int(C.ZSTD_CStreamOutSize())
-	compress_stream_in_size  = int(C.ZSTD_CStreamInSize())
-)
+pub const compress_stream_out_size = int(C.ZSTD_CStreamOutSize())
+pub const compress_stream_in_size = int(C.ZSTD_CStreamInSize())
 
 pub fn new_compress_stream_context() &StreamContext {
 	return new_stream_context(zstd.compress_stream_out_size, zstd.compress_stream_in_size)

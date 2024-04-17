@@ -1,9 +1,7 @@
 module zstd
 
-pub const (
-	decompress_stream_out_size = int(C.ZSTD_DStreamOutSize())
-	decompress_stream_in_size  = int(C.ZSTD_DStreamInSize())
-)
+pub const decompress_stream_out_size = int(C.ZSTD_DStreamOutSize())
+pub const decompress_stream_in_size = int(C.ZSTD_DStreamInSize())
 
 pub fn new_decompress_stream_context() &StreamContext {
 	return new_stream_context(zstd.decompress_stream_out_size, zstd.decompress_stream_in_size)
