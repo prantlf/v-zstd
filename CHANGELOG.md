@@ -1,5 +1,11 @@
 # Changes
 
+## [0.1.2](https://github.com/prantlf/v-zstd/compare/v0.1.1...v0.1.2) (2024-11-16)
+
+### Bug Fixes
+
+* Fix sources for the new V compiler ([4f4d824](https://github.com/prantlf/v-zstd/commit/4f4d8244332905fde3a9952af79a649ba542b105))
+
 ## [0.1.1](https://github.com/prantlf/v-zstd/compare/v0.1.0...v0.1.1) (2023-12-11)
 
 ### Bug Fixes
