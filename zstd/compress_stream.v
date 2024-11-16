@@ -4,7 +4,7 @@ pub const compress_stream_out_size = int(C.ZSTD_CStreamOutSize())
 pub const compress_stream_in_size = int(C.ZSTD_CStreamInSize())
 
 pub fn new_compress_stream_context() &StreamContext {
-	return new_stream_context(zstd.compress_stream_out_size, zstd.compress_stream_in_size)
+	return new_stream_context(compress_stream_out_size, compress_stream_in_size)
 }
 
 @[inline]
@@ -18,7 +18,7 @@ pub fn (c &CompressContext) compress_chunk_at(mut sctx StreamContext, src &u8, s
 	mut pos := 0
 	mut rest_len := src_len
 	for rest_len > 0 {
-		max_len := zstd.compress_stream_in_size - int(sctx.input.size)
+		max_len := compress_stream_in_size - int(sctx.input.size)
 		mut len := 0
 		len, rest_len = if rest_len <= max_len {
 			rest_len, 0

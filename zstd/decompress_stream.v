@@ -4,7 +4,7 @@ pub const decompress_stream_out_size = int(C.ZSTD_DStreamOutSize())
 pub const decompress_stream_in_size = int(C.ZSTD_DStreamInSize())
 
 pub fn new_decompress_stream_context() &StreamContext {
-	return new_stream_context(zstd.decompress_stream_out_size, zstd.decompress_stream_in_size)
+	return new_stream_context(decompress_stream_out_size, decompress_stream_in_size)
 }
 
 @[inline]
@@ -18,7 +18,7 @@ pub fn (d &DecompressContext) decompress_chunk_at(mut sctx StreamContext, src &u
 	mut pos := 0
 	mut rest_len := src_len
 	for rest_len > 0 {
-		max_len := zstd.decompress_stream_in_size - int(sctx.input.size)
+		max_len := decompress_stream_in_size - int(sctx.input.size)
 		mut len := 0
 		len, rest_len = if rest_len <= max_len {
 			rest_len, 0
