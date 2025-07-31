@@ -47,7 +47,6 @@ pub enum CompressParam {
 	stable_out_buffer             = C.ZSTD_c_stableOutBuffer
 	block_delimiters              = C.ZSTD_c_blockDelimiters
 	validate_sequences            = C.ZSTD_c_validateSequences
-	use_block_splitter            = C.ZSTD_c_useBlockSplitter
 	use_row_match_finder          = C.ZSTD_c_useRowMatchFinder
 	prefetch_c_dict_tables        = C.ZSTD_c_prefetchCDictTables
 	enable_seq_producer_fallback  = C.ZSTD_c_enableSeqProducerFallback

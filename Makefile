@@ -13,7 +13,7 @@ build:
 	v $(VFLAGS) -o gunzstd cmd/gunzstd/gunzstd.v
 
 test:
-	v -use-os-system-to-run test .
+	v test .
 	./test.sh
 
 clean:

@@ -26,6 +26,7 @@ $if windows {
 #flag @VROOT/libzstd/compress/zstd_lazy.o
 #flag @VROOT/libzstd/compress/zstd_ldm.o
 #flag @VROOT/libzstd/compress/zstd_opt.o
+#flag @VROOT/libzstd/compress/zstd_preSplit.o
 #flag @VROOT/libzstd/compress/zstdmt_compress.o
 #flag @VROOT/libzstd/decompress/huf_decompress.o
 #flag @VROOT/libzstd/decompress/zstd_ddict.o
