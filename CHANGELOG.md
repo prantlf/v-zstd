@@ -1,5 +1,15 @@
 # Changes
 
+## [0.2.0](https://github.com/prantlf/v-zstd/compare/v0.1.2...v0.2.0) (2025-07-31)
+
+### Features
+
+* Upgrade to zstd 1.5.7 ([3a7b56b](https://github.com/prantlf/v-zstd/commit/3a7b56bc9c45e8abcc2bd195b5b12948b2bfcb52))
+
+### BREAKING CHANGES
+
+Remove compression option `use_block_splitter`.
+
 ## [0.1.2](https://github.com/prantlf/v-zstd/compare/v0.1.1...v0.1.2) (2024-11-16)
 
 ### Bug Fixes
