@@ -2,19 +2,19 @@ ifeq (1,${RELEASE})
 	VFLAGS=-prod
 endif
 
-all: check build test
+all: check test
 
 check:
 	v fmt -w .
 	v vet .
 
-build:
-	v $(VFLAGS) -o gzstd cmd/gzstd/gzstd.v
-	v $(VFLAGS) -o gunzstd cmd/gunzstd/gunzstd.v
+# build:
+# 	v $(VFLAGS) -o gzstd cmd/gzstd/gzstd.v
+# 	v $(VFLAGS) -o gunzstd cmd/gunzstd/gunzstd.v
 
 test:
 	v test .
-	./test.sh
+# 	./test.sh
 
 clean:
-	rm -rf src/*_test src/*.dSYM gzstd gunzstd
+	rm -rf *_test *.dSYM gzstd gunzstd

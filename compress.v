@@ -22,7 +22,9 @@ pub fn compress_to(mut dst []u8, src []u8) !int {
 
 @[inline]
 pub fn compress_with_level_to(mut dst []u8, src []u8, compression_level int) !int {
-	return unsafe { compress_with_level_at(mut dst.data, dst.len, src.data, src.len, compression_level)! }
+	return unsafe {
+		compress_with_level_at(mut dst.data, dst.len, src.data, src.len, compression_level)!
+	}
 }
 
 @[inline; unsafe]

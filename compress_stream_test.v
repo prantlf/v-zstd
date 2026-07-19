@@ -26,7 +26,8 @@ fn test_compress_one() {
 	cctx.set_param(CompressParam.compression_level, 5)!
 	cctx.set_param(CompressParam.checksum_flag, 1)!
 
-	src := 'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
+	src :=
+		'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
 	mut dst := []u8{cap: compress_bound(src.len)}
 	mut dst_ref := &dst
 
@@ -56,7 +57,8 @@ fn test_compress_two() {
 	cctx.set_param(CompressParam.compression_level, 5)!
 	cctx.set_param(CompressParam.checksum_flag, 1)!
 
-	src := 'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
+	src :=
+		'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
 	half := src.len / 2
 
 	max_len := compress_bound(src.len)
@@ -91,7 +93,8 @@ fn test_compress_with_end() {
 	cctx.set_param(CompressParam.compression_level, 5)!
 	cctx.set_param(CompressParam.checksum_flag, 1)!
 
-	src := 'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
+	src :=
+		'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
 	half := src.len / 2
 
 	max_len := compress_bound(src.len)
@@ -104,8 +107,7 @@ fn test_compress_with_end() {
 	mut sctx := new_compress_stream_context()
 	unsafe {
 		cctx.compress_chunk_at(mut sctx, src.data, half, false, drain)!
-		cctx.compress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, false,
-			drain)!
+		cctx.compress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, false, drain)!
 	}
 	cctx.compress_end(mut sctx, drain)!
 

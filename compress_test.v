@@ -1,7 +1,8 @@
 module zstd
 
 fn test_compress() {
-	src := 'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
+	src :=
+		'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
 	dst := compress(src)!
 	assert dst == [u8(40), u8(181), u8(47), u8(253), u8(32), u8(85), u8(61), u8(2), u8(0), u8(18),
 		u8(133), u8(15), u8(20), u8(176), u8(55), u8(7), u8(208), u8(167), u8(37), u8(249), u8(38),

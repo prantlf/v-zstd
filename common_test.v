@@ -9,7 +9,8 @@ fn test_get_frame_content_size_empty() {
 }
 
 fn test_get_frame_content_size_real() {
-	src := 'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
+	src :=
+		'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
 	dst := compress(src)!
 	len := get_frame_content_size(dst)!
 	assert len == src.len

@@ -74,8 +74,7 @@ fn test_decompress_two() {
 	mut sctx := new_decompress_stream_context()
 	unsafe {
 		dctx.decompress_chunk_at(mut sctx, src.data, half, false, drain)!
-		dctx.decompress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, true,
-			drain)!
+		dctx.decompress_chunk_at(mut sctx, &u8(src.data) + half, src.len - half, true, drain)!
 	}
 	assert dst == 'A sentence with a length longer than a minimum content size to test zstd compression.'.bytes()
 	assert src == compress_stream_test(dst)!
