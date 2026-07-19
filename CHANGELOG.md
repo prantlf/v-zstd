@@ -1,5 +1,11 @@
 # Changes
 
+## [0.3.0](https://github.com/prantlf/v-zstd/compare/v0.2.0...v0.3.0) (2026-07-19)
+
+### Features
+
+* Adapt to breaking changes in V ([430633a](https://github.com/prantlf/v-zstd/commit/430633a6c4da53cf6bf4d52a8fe4478a0505ec69))
+
 ## [0.2.0](https://github.com/prantlf/v-zstd/compare/v0.1.2...v0.2.0) (2025-07-31)
 
 ### Features
